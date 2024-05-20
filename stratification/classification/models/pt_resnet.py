@@ -199,7 +199,7 @@ def _load_state_dict(model, model_url, load_classifier=True):
     model.load_state_dict(state_dict)
 
 
-def PyTorchResNet(imagenet_pretrained=True, **kwargs):
+def PyTorchResNet(imagenet_pretrained=False, **kwargs):
     depth = 50
     if depth == 50:
         block_config = (3, 4, 6, 3)
