@@ -3,6 +3,7 @@ import os
 import logging
 from collections import Counter
 from PIL import Image
+import kaggle
 
 import numpy as np
 import pandas as pd
@@ -39,8 +40,17 @@ class WaterbirdsDataset(GEORGEDataset):
         return os.path.isfile(os.path.join(self.processed_folder, 'metadata.csv'))
 
     def _download(self):
-        """Raises an error if the raw dataset has not yet been downloaded."""
-        raise ValueError('Follow the README instructions to download the dataset.')
+        if self._check_exists():
+            return
+
+        os.makedirs(self.processed_folder, exist_ok=True)
+
+        # download files
+        kaggle.api.authenticate()
+        kaggle.api.dataset_download_files('bahardibaie/waterbird',path=self.processed_folder, unzip=True)   
+        if not self._check_exists():
+            """Raises an error if the raw dataset has not yet been downloaded."""
+            raise ValueError('Dataset not downloaded.')
 
     def _load_samples(self):
         """Loads the Waterbirds dataset"""
