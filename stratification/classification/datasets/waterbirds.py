@@ -28,12 +28,12 @@ class WaterbirdsDataset(GEORGEDataset):
                  augment=False):
         assert (transform is None)
         transform = get_transform_cub()
-        super().__init__('waterbirds', root, split, transform=transform, download=download,
+        super().__init__('waterbird', root, split, transform=transform, download=download,
                          ontology=ontology)
 
     @property
     def processed_folder(self):
-        return os.path.join(self.root, 'waterbirds')
+        return os.path.join(self.root, 'waterbird')
 
     def _check_exists(self):
         """Checks whether or not the waterbirds labels CSV has been initialized."""
@@ -47,7 +47,7 @@ class WaterbirdsDataset(GEORGEDataset):
 
         # download files
         kaggle.api.authenticate()
-        kaggle.api.dataset_download_files('bahardibaie/waterbird',path=self.processed_folder, unzip=True)   
+        kaggle.api.dataset_download_files('bahardibaie/waterbird',path=self.root, unzip=True)   
         if not self._check_exists():
             """Raises an error if the raw dataset has not yet been downloaded."""
             raise ValueError('Dataset not downloaded.')
