@@ -453,11 +453,11 @@ class GEORGEClassification:
             f'Loss: {outputs["metrics"]["loss"]:.3f}, '
             f'Acc.: {outputs["metrics"]["acc"]:.2f}%, '
         ]
-        if self.logger.type == 'full':
-            output_strs += [
-                f'Rw. loss: {outputs["metrics"]["loss_rw"]:.3f}, '
-                f'Rw. acc: {outputs["metrics"]["acc_rw"]:.2f}%, ',
-            ]
+        #if self.logger.type == 'full':
+        output_strs += [
+            f'Rw. loss: {outputs["metrics"]["loss_rw"]:.3f}, '
+            f'Rw. acc: {outputs["metrics"]["acc_rw"]:.2f}%, ',
+        ]
         output_strs += [
             f'True rob. loss: {outputs["metrics"]["true_subclass_rob_loss"]:.3f}, '
             f'True rob. acc: {outputs["metrics"]["true_subclass_rob_acc"]:.2f}%'
