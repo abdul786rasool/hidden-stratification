@@ -206,7 +206,7 @@ def PyTorchResNet(imagenet_pretrained=False, **kwargs):
         block = BasicBlock
     else:
         raise ValueError('Invalid depth specified')
-    model = ResNet(block=block, layers=block_config, **kwargs)
+    model = ResNet(block=block, layers=(2,2,2,2), **kwargs)
     if imagenet_pretrained:
         logging.info('Loading pretrained model...')
         load_success = False
