@@ -8,8 +8,8 @@
         "checkpoint_metric": "val_acc_rw",
         "optimizer_config": {
             "class_args": {
-                "lr": 1e-5,
-                "weight_decay": 1.0,
+                "lr": 0.005,
+                "weight_decay": 1e-5,
                 "momentum": 0.9                
                 
             },
@@ -22,13 +22,11 @@
             "loss",
             "acc"
         ],
-        "num_epochs":250,
+        "num_epochs":150,
         "batch_size": 128,
         "scheduler_config": {
             "class_args": {
                 "milestones": [
-                    50,
-                    75
                 ]
             },
             "class_name": "MultiStepLR"
@@ -43,16 +41,17 @@
             "uniform_group_sampling": true            
         },
         "dataset_config": {
-            "subsample": false,
-            "resize": false
         }
     },
     "reduction_config": {
-        "model": "umap"
+        "model": "hardness",
+        "components": 1,
+        "normalize": false
     },
     "cluster_config": {
         "model": "gmm",
         "metric_types": [
+             "mean_loss",
             "composition"
         ],
         "search_k": true
