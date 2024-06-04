@@ -203,7 +203,7 @@ def PyTorchResNet(imagenet_pretrained=True, **kwargs):
     depth = 50
     if depth == 50:
         block_config = (3, 4, 6, 3)
-        block = BasicBlock
+        block = Bottleneck
     else:
         raise ValueError('Invalid depth specified')
     model = ResNet(block=block, layers=block_config, **kwargs)
