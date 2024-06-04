@@ -199,14 +199,14 @@ def _load_state_dict(model, model_url, load_classifier=True):
     model.load_state_dict(state_dict)
 
 
-def PyTorchResNet(imagenet_pretrained=False, **kwargs):
+def PyTorchResNet(imagenet_pretrained=True, **kwargs):
     depth = 50
     if depth == 50:
         block_config = (3, 4, 6, 3)
         block = BasicBlock
     else:
         raise ValueError('Invalid depth specified')
-    model = ResNet(block=block, layers=(2,2,2,2), **kwargs)
+    model = ResNet(block=block, layers=block_config, **kwargs)
     if imagenet_pretrained:
         logging.info('Loading pretrained model...')
         load_success = False
