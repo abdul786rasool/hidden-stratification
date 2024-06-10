@@ -57,7 +57,7 @@ class CifarTenDataset(GEORGEDataset):
             superclass_labels = (original_labels > 3).long()
             self.superclass_names = ['< 4', '≥ 4']
         elif self.ontology == '3-sup-class':
-            superclass_labels = torch.tensor(list(map(lambda x : self.class_div.get(x,2),original_labels))).long()
+            superclass_labels = torch.tensor(list(map(lambda x : self.class_div.get(int(x),2),original_labels))).long()
             print(np.bincount(superclass_labels))
         else:
             raise ValueError(f'Ontology {self.ontology} not supported.')
