@@ -25,12 +25,13 @@ class CifarTenDataset(GEORGEDataset):
     _pil_mode = "RGB"
 
     def __init__(self, root, split, transform=None, resize=True, download=False, subsample_8=False,
-                 ontology='four-comp', augment=False):
+                 ontology='3-sup-class', augment=False):
         assert (transform is None)
         transform = get_transform_CIFAR(resize=resize, augment=augment)
         self.subclass_proportions = {8: 0.05} if ('train' in split and subsample_8) else {}
         self.category_to_label = {'airplane':0, 'automobile':1, 'ship':2, 'truck':3,
                                 'bird':4, 'cat':5, 'deer':6, 'dog':7, 'frog':8, 'horse':9}
+        self.class_div = {0:0, 4:0 , 2:1}
         super().__init__('CIFAR10', root, split, transform=transform, download=download,
                          ontology=ontology)
 
@@ -55,6 +56,8 @@ class CifarTenDataset(GEORGEDataset):
         if self.ontology == 'four-comp':
             superclass_labels = (original_labels > 3).long()
             self.superclass_names = ['< 4', '≥ 4']
+        elif self.ontology == '3-sup-class':
+            superclass_labels = np.array(map(lambda x : self.class_div.get(x,2),original_labels)).long()
         else:
             raise ValueError(f'Ontology {self.ontology} not supported.')
 
