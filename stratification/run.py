@@ -62,10 +62,13 @@ def main():
         if rep_done:
             reduction_dir = config['representation_dir']
         else:
-            reduction_model = harness.get_reduction_model(config, nn_model=model)
+            if config['reduction_config']['model']=='no reduction':
+                reduction_model = None
+            else:    
+                reduction_model = harness.get_reduction_model(config, nn_model=model)
             reduction_dir = harness.reduce(config['reduction_config'], reduction_model,
                                            inputs_path=os.path.join(erm_dir, 'outputs.pt'))
-
+            
         # Cluster the per-superclass features
         if cluster_done:
             cluster_dir = config['cluster_dir']
