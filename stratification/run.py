@@ -49,6 +49,7 @@ def main():
             model.load_state_dict(torch.load(model_path)['state_dict'])
         erm_dir = harness.classify(config['classification_config'], model, dataloaders,
                                    mode=first_mode)
+        print(f "erm dir : {erm_dir}")
 
     if config['classification_config']['eval_only'] or config['classification_config'][
             'save_act_only']:
