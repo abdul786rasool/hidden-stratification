@@ -192,11 +192,16 @@ class GEORGEHarness:
 
         # apply dimensionality reduction (if specified) to the data
         reducer = GEORGEReducer(reduction_config, save_dir=save_dir, log_format=self.log_format)
-        group_to_models, train_means = reducer.train(reduction_model, inputs)
+        if reduction_config['model']=='no reduction':
+            group_to_models, train_means = None, None
+            no_reduction = True
+        else:    
+            group_to_models, train_means = reducer.train(reduction_model, inputs)
+            no_reduction = False
 
         split_to_outputs = {}
         for split, split_inputs in inputs.items():
-            outputs = reducer.evaluate(group_to_models, inputs[split], train_means)
+            outputs = reducer.evaluate(group_to_models, inputs[split], train_means,no_reduction=no_reduction)
             split_to_outputs[split] = (outputs, inputs[split]['superclass'])
 
         # save reduced data
