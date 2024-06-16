@@ -15,7 +15,7 @@ def main():
     torch.multiprocessing.set_sharing_strategy('file_system')
     harness = GEORGEHarness(config, use_cuda=use_cuda)
     harness.save_full_config(config)
-
+    print(config)
     first_mode = 'erm' if (config['mode'] == 'george') else config['mode']
     dataloaders = harness.get_dataloaders(config, mode=first_mode)
     num_classes = dataloaders['train'].dataset.get_num_classes('superclass')
