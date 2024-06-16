@@ -120,7 +120,7 @@ class GEORGEReducer:
 
         return group_to_models, train_means
 
-    def evaluate(self, group_to_models, split_inputs, train_means=None):
+    def evaluate(self, group_to_models, split_inputs, train_means=None,no_reduction=False):
         """Reduces each of the inputs.
 
         Args:
@@ -139,6 +139,9 @@ class GEORGEReducer:
         if self.config['mean_reduce']: assert (train_means is not None)
         group_assignments = split_inputs['superclass']
         group_to_data = self._group(split_inputs, group_assignments)
+        if no_reduction:
+            group_to_outputs = group_to_data.copy()
+            return group_to_outputs        
         groups = np.unique(group_assignments)
         assert len(group_to_models) <= len(groups), \
             'There must be a model for each group in the input data.'
