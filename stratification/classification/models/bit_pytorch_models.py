@@ -205,7 +205,7 @@ KNOWN_MODELS = OrderedDict([
 
 def BiTResNet(pretrained=True, **kwargs):
     assert (pretrained)
-    model = KNOWN_MODELS['BiT-M-R50x1'](head_size=10, zero_head=True)
+    model = KNOWN_MODELS['BiT-M-R50x1'](head_size=20, zero_head=True)
     model_path = 'stratification/classification/models/BiT-M-R50x1.npz'
     if not os.path.isfile(model_path):
         download_url('https://storage.googleapis.com/bit_models/BiT-M-R50x1.npz',
