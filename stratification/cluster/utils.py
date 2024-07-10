@@ -32,5 +32,5 @@ def get_cluster_composition(superclasses, assignments):
         superclasses_c = superclasses[assignments == c]
         counts = dict(Counter(superclasses_c))
         compositions[str(c)] = {str(s): counts.get(s, 0) for s in S}
-    compositions['adjusted_rand_score']=(superclasses,assignments)    
+    compositions['adjusted_rand_score']=adjusted_rand_score(superclasses,assignments)    
     return compositions
