@@ -1,7 +1,7 @@
 from collections import Counter
 import numpy as np
 from stratification.cluster.fast_sil import silhouette_samples
-
+from sklearn.metrics.cluster import adjusted_rand_score
 
 def get_k_from_model(model):
     if hasattr(model, 'n_clusters'):
@@ -32,4 +32,5 @@ def get_cluster_composition(superclasses, assignments):
         superclasses_c = superclasses[assignments == c]
         counts = dict(Counter(superclasses_c))
         compositions[str(c)] = {str(s): counts.get(s, 0) for s in S}
+    compositions['adjusted_rand_score']=(superclasses,assignments)    
     return compositions
