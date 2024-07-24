@@ -379,7 +379,7 @@ class GEORGEHarness:
             mode_config = cl_config[f'gdro_config']
         cl_config = merge_dicts(cl_config, mode_config)
         if cl_config['bit_pretrained']:
-            model_cls = BiTResNet
+            model_cls = Dino_Model
         else:
             models = {'lenet4': LeNet4, 'resnet50': PyTorchResNet, 'shallow_cnn': ShallowCNN,'bit_resnet': BiTResNet}
             try:
