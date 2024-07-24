@@ -312,8 +312,8 @@ class GEORGEClassification:
 
             type_to_labels = {}
             for label_type in type_to_num_classes.keys():
-                type_to_labels[label_type] = targets[label_type]
-                outputs[label_type].append(targets[label_type])
+                type_to_labels[label_type] = targets[label_type].cpu()
+                outputs[label_type].append(targets[label_type].cpu())
 
             if optimize and not bit_pretrained:
                 logits = model(inputs)
@@ -343,9 +343,11 @@ class GEORGEClassification:
             logits = logits.detach().cpu()
             loss_targets = loss_targets.detach().cpu()
             losses = losses.detach().cpu()
+            inputs = inputs.cpu()
+            targets = targets.cpu()
             
             # Clear intermediate variables
-            del logits, loss_targets, losses
+           
             torch.cuda.empty_cache()
             gc.collect()
           
