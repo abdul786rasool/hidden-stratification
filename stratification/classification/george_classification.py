@@ -327,7 +327,9 @@ class GEORGEClassification:
                 with torch.no_grad():
                     logits = model(inputs)
                     logits = logits.detach().cpu()
-                    inputs, targets = move_to_device([inputs, targets], device=-1)
+                    inputs = inputs.cpu()
+                    targets = {key: value.cpu() for key, value in targets.items()}
+                    
                     loss_targets = targets['superclass']
                     if bit_pretrained:
                         if progress:
