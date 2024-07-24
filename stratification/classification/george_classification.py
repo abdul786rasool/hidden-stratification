@@ -1,6 +1,7 @@
 import os
 import logging
 from functools import partial
+import gc
 
 import numpy as np
 import sklearn.metrics
@@ -400,6 +401,9 @@ class GEORGEClassification:
                            for k, v in metric_meters.items()}
                     })
                 bar.next()
+            if batch_idx % 100 == 0:
+                torch.cuda.empty_cache()
+                gc.collect()      
         if progress:
             bar.finish()
         if activations_handle:
