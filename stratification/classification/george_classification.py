@@ -339,7 +339,16 @@ class GEORGEClassification:
                         continue
                     co = self.criterion(logits, loss_targets, targets['subclass'])
                     loss, (losses, corrects), _ = co
-
+                  
+            logits = logits.detach().cpu()
+            loss_targets = loss_targets.detach().cpu()
+            losses = losses.detach().cpu()
+            
+            # Clear intermediate variables
+            del logits, loss_targets, losses
+            torch.cuda.empty_cache()
+            gc.collect()
+          
             if not save_activations:
                 outputs['activations'].pop()  # delete activations
 
@@ -350,10 +359,11 @@ class GEORGEClassification:
                                                      reweight=reweight_vec)
             acc, preds = compute_accuracy(logits.data, loss_targets.data, return_preds=True)
 
-            outputs['probs'].append(F.softmax(logits, dim=1).detach().cpu()[:, 1])
+            outputs['probs'].append(F.softmax(logits, dim=1)[:, 1])
             outputs['preds'].append(preds)
-            outputs['losses'].append(losses.detach().cpu())
-            outputs['targets'].append(loss_targets.detach().cpu())
+            outputs['losses'].append(losses)
+            outputs['targets'].append(loss_targets)
+          
             if reweight_vec is not None:
                 outputs['reweight'].append(reweight_vec.cpu())
 
