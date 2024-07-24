@@ -325,19 +325,7 @@ class GEORGEClassification:
                 self.optimizer.step()
             else:
                 with torch.no_grad():
-                    logits = model(inputs)
-                    logits_c = logits.detach().cpu()
-                    inputs_c = inputs.cpu()
-                    targets_c = {key: value.cpu() for key, value in targets.items()}
-                    del logits
-                    del inputs
-                    del targets
-                    logits = logits_c
-                    inputs = inputs_c
-                    targets = targets_c
-                    torch.cuda.empty_cache()
-                    gc.collect()
-                    
+                    logits = model(inputs)   
                     loss_targets = targets['superclass']
                     if bit_pretrained:
                         if progress:
@@ -366,10 +354,10 @@ class GEORGEClassification:
                                                      reweight=reweight_vec)
             acc, preds = compute_accuracy(logits.data, loss_targets.data, return_preds=True)
 
-            outputs['probs'].append(F.softmax(logits, dim=1)[:, 1])
+            outputs['probs'].append(F.softmax(logits, dim=1).detach().cpu()[:, 1])
             outputs['preds'].append(preds)
-            outputs['losses'].append(losses)
-            outputs['targets'].append(loss_targets)
+            outputs['losses'].append(losses.detach().cpu())
+            outputs['targets'].append(loss_targets.detach().cpu())
           
             if reweight_vec is not None:
                 outputs['reweight'].append(reweight_vec.cpu())
@@ -418,9 +406,7 @@ class GEORGEClassification:
                            for k, v in metric_meters.items()}
                     })
                 bar.next()
-            if batch_idx % 100 == 0:
-                torch.cuda.empty_cache()
-                gc.collect()      
+   
         if progress:
             bar.finish()
         if activations_handle:
