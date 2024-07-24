@@ -317,6 +317,9 @@ class GEORGEClassification:
 
             if optimize and not bit_pretrained:
                 logits = model(inputs)
+                logits = logits.detach().cpu()
+                inputs = inputs.cpu()
+                targets = targets.cpu()
                 loss_targets = targets['superclass']
                 co = self.criterion(logits, loss_targets, targets['subclass'])
                 loss, (losses, corrects), _ = co
@@ -340,12 +343,6 @@ class GEORGEClassification:
                     co = self.criterion(logits, loss_targets, targets['subclass'])
                     loss, (losses, corrects), _ = co
                   
-            logits = logits.detach().cpu()
-            loss_targets = loss_targets.detach().cpu()
-            losses = losses.detach().cpu()
-            inputs = inputs.cpu()
-            targets = targets.cpu()
-            
             # Clear intermediate variables
            
             torch.cuda.empty_cache()
