@@ -326,9 +326,15 @@ class GEORGEClassification:
             else:
                 with torch.no_grad():
                     logits = model(inputs)
-                    logits = logits.detach().cpu()
-                    inputs = inputs.cpu()
-                    targets = {key: value.cpu() for key, value in targets.items()}
+                    logits_c = logits.detach().cpu()
+                    inputs_c = inputs.cpu()
+                    targets_c = {key: value.cpu() for key, value in targets.items()}
+                    del logits
+                    del inputs
+                    del targets
+                    logits = logits_c
+                    inputs = inputs_c
+                    targets = targets_c
                     
                     loss_targets = targets['superclass']
                     if bit_pretrained:
