@@ -317,9 +317,6 @@ class GEORGEClassification:
 
             if optimize and not bit_pretrained:
                 logits = model(inputs)
-                logits = logits.detach().cpu()
-                inputs = inputs.cpu()
-                targets = targets.cpu()
                 loss_targets = targets['superclass']
                 co = self.criterion(logits, loss_targets, targets['subclass'])
                 loss, (losses, corrects), _ = co
@@ -329,6 +326,9 @@ class GEORGEClassification:
             else:
                 with torch.no_grad():
                     logits = model(inputs)
+                    logits = logits.detach().cpu()
+                    inputs = inputs.cpu()
+                    targets = targets.cpu()
                     loss_targets = targets['superclass']
                     if bit_pretrained:
                         if progress:
