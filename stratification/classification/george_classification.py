@@ -335,6 +335,8 @@ class GEORGEClassification:
                     logits = logits_c
                     inputs = inputs_c
                     targets = targets_c
+                    torch.cuda.empty_cache()
+                    gc.collect()
                     
                     loss_targets = targets['superclass']
                     if bit_pretrained:
@@ -352,8 +354,7 @@ class GEORGEClassification:
                   
             # Clear intermediate variables
            
-            torch.cuda.empty_cache()
-            gc.collect()
+
           
             if not save_activations:
                 outputs['activations'].pop()  # delete activations
