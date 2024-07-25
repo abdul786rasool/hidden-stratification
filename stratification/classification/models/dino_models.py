@@ -428,7 +428,7 @@ def Dino_Model(**kwargs):
     model = vit_large()
     # Load the weights from a local file or URL
     weights_path = os.path.join(model_path,file_name)  # Replace with your actual path
-    state_dict = torch.load(weights_path)
+    state_dict = torch.load(weights_path,map='cuda')
     model.load_state_dict(state_dict)
      # To export
     model.activation_layer_name = 'head'
