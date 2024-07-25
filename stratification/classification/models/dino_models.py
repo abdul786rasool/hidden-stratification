@@ -24,7 +24,14 @@ def download_file(url, folder_path, file_name):
 
 
 def Dino_Model(**kwargs):
-    model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14',pretrained=True).eval()
+    model_ = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14',pretrained=True).eval()
+     # To export
+
+    traced_graph = torch.jit.trace(model_, torch.randn(1, 3, 224, 224))
+    traced_graph.save('stratification/classification/models/dinov2_vitl14_pretrain.pth')
+    
+     # To load
+    model = torch.jit.load('stratification/classification/models/dinov2_vitl14_pretrain.pth').eval()
     '''model_path = 'stratification/classification/models'
     url = 'https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_pretrain.pth'
     file_name = 'dinov2_vitl14_pretrain.pth'
