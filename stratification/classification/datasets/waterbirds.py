@@ -196,7 +196,7 @@ def get_transform_cub():
     target_resolution = (224, 224)
 
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),
+        transforms.Resize((518, 518)),
         #transforms.CenterCrop(target_resolution),
         transforms.ToTensor(),
         transforms.Normalize(**WaterbirdsDataset._normalization_stats),
