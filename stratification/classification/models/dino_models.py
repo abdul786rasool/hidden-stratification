@@ -24,7 +24,7 @@ def download_file(url, folder_path, file_name):
 
 
 def Dino_Model(**kwargs):
-    model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitg14',pretrained=False)
+    model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vitl14',pretrained=False)
     model_path = 'stratification/classification/models'
     url = 'https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_pretrain.pth'
     file_name = 'dinov2_vitl14_pretrain.pth'
