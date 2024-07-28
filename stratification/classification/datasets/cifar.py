@@ -24,7 +24,7 @@ class CIFARDataset(GEORGEDataset):
     _normalization_stats = {'mean': (0.5071, 0.4865, 0.4409), 'std': (0.2673, 0.2564, 0.2761)}
     _pil_mode = "RGB"
 
-    def __init__(self, root, split, transform=None, resize=True, download=False, subsample=False,ontology='five-comp',
+    def __init__(self, root, split, transform=None, resize=False, download=False, subsample=False,ontology='five-comp',
                   augment=False):
         assert (transform is None)
         transform = get_transform_CIFAR(resize=resize, augment=augment)
@@ -193,7 +193,7 @@ def get_transform_CIFAR(resize=True, augment=False):
         transforms.Normalize(**CIFARDataset._normalization_stats)
     ]
     if resize:
-        test_transform_list.insert(0, transforms.Resize((224, 224)))
+        test_transform_list.insert(0, transforms.Resize((32, 32)))
     if not augment:
         return transforms.Compose(test_transform_list)
 
