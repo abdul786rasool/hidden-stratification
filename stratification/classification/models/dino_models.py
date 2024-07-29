@@ -421,6 +421,7 @@ def download_file(url, folder_path, file_name):
     print(f"File downloaded successfully and saved to {file_path}")
 
 def Dino_Model(**kwargs):
+    '''
     model_path = 'stratification/classification/models'
     url = 'https://dl.fbaipublicfiles.com/dinov2/dinov2_vitl14/dinov2_vitl14_pretrain.pth'
     file_name = 'dinov2_vitl14_pretrain.pth'
@@ -430,6 +431,7 @@ def Dino_Model(**kwargs):
     weights_path = os.path.join(model_path,file_name)  # Replace with your actual path
     state_dict = torch.load(weights_path)
     model.load_state_dict(state_dict)
-     # To export
+     # To export'''
+    model = torch.hub.load('facebookresearch/dinov2', 'dinov2_vits14',pretrained=True)
     model.activation_layer_name = 'head'
     return model
