@@ -202,7 +202,7 @@ def get_transform_CIFAR(resize=True, augment=False):
         transforms.Normalize(**CifarTenDataset._normalization_stats)
     ]
     if resize:
-        test_transform_list.insert(0, transforms.Resize((32, 32)))
+        test_transform_list.insert(0, transforms.Resize((518, 518)))
     if not augment:
         return transforms.Compose(test_transform_list)
 
