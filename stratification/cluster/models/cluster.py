@@ -9,12 +9,13 @@ import logging
 import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
+from sklearn.cluster import SpectralClustering
 
 from stratification.cluster.utils import silhouette_samples
 
 __all__ = [
     'KMeans', 'GaussianMixture', 'FastKMeans', 'AutoKMixtureModel', 'OverclusterModel',
-    'DummyClusterer'
+    'DummyClusterer', 'SpectralClustering'
 ]
 
 
@@ -84,6 +85,9 @@ class AutoKMixtureModel:
         elif cluster_method == 'gmm':
             cluster_cls = GaussianMixture
             k_name = 'n_components'
+        elif cluster_method == 'spectral':
+            cluster_cls = SpectralClustering
+            k_name = 'n_clusters'    
         else:
             raise ValueError('Unsupported clustering method')
 
