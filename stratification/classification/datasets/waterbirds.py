@@ -193,11 +193,11 @@ class WaterbirdsDataset(GEORGEDataset):
 
 
 def get_transform_cub():
-    target_resolution = (518, 518)
+    target_resolution = (224, 224)
 
     transform = transforms.Compose([
-        transforms.Resize(target_resolution),
-        #transforms.CenterCrop(target_resolution),
+        transforms.Resize((256, 256)),
+        transforms.CenterCrop(target_resolution),
         transforms.ToTensor(),
         transforms.Normalize(**WaterbirdsDataset._normalization_stats),
     ])
