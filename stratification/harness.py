@@ -151,7 +151,7 @@ class GEORGEHarness:
         trainer = GEORGEClassification(
             classification_config, save_dir=save_dir, use_cuda=self.use_cuda,
             log_format=self.log_format,
-            has_estimated_subclasses=mode not in ['erm', 'true_subclass_gdro'])
+            has_estimated_subclasses=mode not in ['erm', 'true_subclass_gdro','sp_subclass_gdro'])
         if not (classification_config['eval_only'] or classification_config['save_act_only']
                 or classification_config['bit_pretrained']):
             trainer.train(model, dataloaders['train'], dataloaders['val'], robust=robust)
@@ -286,12 +286,12 @@ class GEORGEHarness:
 
     def _get_robust_status(self, mode):
         """Identifies if the given `mode` calls for DRO"""
-        if mode in {'george', 'random_gdro', 'superclass_gdro', 'true_subclass_gdro'}:
+        if mode in {'george', 'random_gdro', 'superclass_gdro', 'true_subclass_gdro','sp_subclass_gdro'}:
             return True
         elif mode == 'erm':
             return False
         raise ValueError('mode {mode} not valid. Use one of the following:\n' +
-                         '["george", "random_gdro", "superclass_gdro", "true_subclass_gdro", ' +
+                         '["george", "random_gdro", "superclass_gdro", "true_subclass_gdro", "sp_subclass_gdro", ' +
                          '"erm"]')
 
     def get_dataloaders(self, config, mode='erm', transforms=None, subclass_labels=None):
