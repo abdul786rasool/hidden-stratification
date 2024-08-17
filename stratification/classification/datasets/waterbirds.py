@@ -87,8 +87,8 @@ class WaterbirdsDataset(GEORGEDataset):
         Y_dict = {
             'superclass': torch.from_numpy(superclass_labels),
             'true_subclass': torch.from_numpy(true_subclass_labels),
-            'original': torch.from_numpy(original_labels),
-            'sp_subclass' : torch.from_numpy(np.array(self.df['sp_subclass']))
+            'original': torch.from_numpy(original_labels)
+            #'sp_subclass' : torch.from_numpy(np.array(self.df['sp_subclass']))
         }
         return X, Y_dict
 
