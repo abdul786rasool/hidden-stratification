@@ -116,7 +116,7 @@ class GEORGECluster:
 
         return group_to_models
 
-    def evaluate(self, group_to_models, split_inputs):
+    def evaluate(self, group_to_models, split_inputs, a=None):
         """Returns cluster assignments for each of the inputs.
         
         Args:
@@ -141,7 +141,10 @@ class GEORGECluster:
 
             group_outputs = group_data.copy()
             cluster_model = group_to_models[group]
-            assignments = np.array(cluster_model.predict(group_data['activations']))
+            if not a:
+                assignments = np.array(cluster_model.predict(group_data['activations']))
+            else:
+                assignments = a[group].copy() 
             group_outputs['assignments'] = cluster_floor + assignments
 
             group_to_outputs[group] = group_outputs
