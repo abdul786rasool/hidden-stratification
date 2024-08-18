@@ -10,13 +10,56 @@ import numpy as np
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.cluster import SpectralClustering
-
+import torch
+from sklearn.neighbors import kneighbors_graph
 from stratification.cluster.utils import silhouette_samples
+from sklearn.metrics import pairwise_distances
+from sklearn.metrics.pairwise import rbf_kernel
+
 
 __all__ = [
     'KMeans', 'GaussianMixture', 'FastKMeans', 'AutoKMixtureModel', 'OverclusterModel',
     'DummyClusterer', 'SpectralClustering'
 ]
+
+
+
+class SpectralClustering:
+    def __init__(self,n_clusters,n_components=None,random_state=None,n_init=10,gamma=1.0,affinity='nearest_neighbors',verbose=False):
+        self.k = n_clusters
+        self.n_init = n_init
+        self.n_components = n_components if n_components else n_clusters
+        self.seed = random_state
+        self.verbose = verbose
+        self.affinity = affinity
+        self.gamma = gamma
+        
+    def fit(self,X):
+        return self
+
+    def fit_predict(self,X):
+        X = torch.tensor(X).cuda()
+        if self.affinity=='nearest_neighbors':
+            affinity = kneighbors_graph(X.cpu().numpy(), n_neighbors=10, mode='connectivity',include_self=True)
+            affinity = torch.tensor(affinity.toarray()).float().cuda()
+
+        else:
+            pairwise_dists = pairwise_distances(X.cpu().numpy())
+            affinity = rbf_kernel(pairwise_dists, gamma=self.gamma)
+            affinity = torch.tensor(affinity).float().cuda()
+
+        D = torch.diag(torch.sum(affinity, dim=1))
+        L = D - affinity
+        eigvals, eigvecs = torch.linalg.eigh(L)
+        k = 2
+        eigvecs_k = eigvecs[:, :k]
+        kmeans = KMeans(n_clusters=self.k,random_state=self.seed,n_init = self.n_init ,verbose=self.verbose)
+        labels = kmeans.fit_predict(eigvecs_k.cpu().numpy())
+        return labels
+    
+    def predict(self,X):
+        return self.fit_predict(X)
+
 
 
 def get_cluster_sils(data, pred_labels, compute_sil=True, cuda=False):
@@ -78,7 +121,7 @@ class FastKMeans:
 
 class AutoKMixtureModel:
     def __init__(self, cluster_method, max_k, n_init=3, seed=None, sil_cuda=False, verbose=0,
-                 search=True):
+                 search=True,n_components=None,gamma=1.0,affinity='nearest_neighbors'):
         if cluster_method == 'kmeans':
             cluster_cls = FastKMeans if (sil_cuda and _LIBKMCUDA_FOUND) else KMeans
             k_name = 'n_clusters'
@@ -87,7 +130,8 @@ class AutoKMixtureModel:
             k_name = 'n_components'
         elif cluster_method == 'spectral':
             cluster_cls = SpectralClustering
-            k_name = 'n_clusters'    
+            k_name = 'n_clusters'
+
         else:
             raise ValueError('Unsupported clustering method')
 
@@ -99,11 +143,17 @@ class AutoKMixtureModel:
         self.seed = seed
         self.sil_cuda = sil_cuda
         self.verbose = verbose
+        self.n_components = n_components
+        self.affinity = affinity
+        self.gamma = gamma        
+
 
     def gen_inner_cluster_obj(self, k):
         # Return a clustering object according to the specified parameters
-        return self.cluster_cls(**{self.k_name: k}, n_init=self.n_init, random_state=self.seed,
-                                verbose=self.verbose)
+        if not isinstance(self.cluster_cls,SpectralClustering):
+            return self.cluster_cls(**{self.k_name: k}, n_init=self.n_init, random_state=self.seed,
+                                    verbose=self.verbose)
+        return self.cluster_cls(n_cluster=k,n_components=self.n_components,random_state=self.seed,gamma=self.gamma,affinity=self.affinity,verbose=self.verbose)
 
     def fit(self, activ):
         logger = logging.getLogger('harness.cluster')
