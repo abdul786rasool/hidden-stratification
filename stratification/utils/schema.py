@@ -243,6 +243,18 @@ schema = {
                     'type': 'number',
                     'default': 5
                 },
+                'n_components':{
+                    'type':'number',
+                    'default' : None
+                },
+                'gamma':{
+                    'type':'number',
+                    'default' : 1.0
+                },
+                'affinity':{
+                    'type':'string',
+                    'default' : 'nearest_neighbors'
+                }, 
                 'superclasses_to_ignore': {
                     'type': 'array',
                     'items': {
