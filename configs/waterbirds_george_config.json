@@ -48,7 +48,6 @@
     },
     "cluster_config": {
         "model": "gmm",
-        "n_components":None,
         "gamma":1.0,
         "affinity": "nearest_neighbors",
         "metric_types": [
