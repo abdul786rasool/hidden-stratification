@@ -245,7 +245,7 @@ schema = {
                 },
                 'n_components':{
                     'type':'number',
-                    'default' : None
+                    'default' : 0
                 },
                 'gamma':{
                     'type':'number',
