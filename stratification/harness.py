@@ -266,10 +266,42 @@ class GEORGEHarness:
         # (2) evaluate
         split_to_metrics = {}
         split_to_outputs = {}
+        assignments = None
+        if cluster_config['model']=='spectral':
+            splits = list(inputs.keys())
+            assignments = {s: {} for s in split}
+            splits_to_index = {split:i for i,split in enumerate(splits)}
+            groups = list(inputs[splits[0]][0].keys())
+            for group in groups:
+                assignments[split][group]={}
+                mask = np.empty(0,)
+                activations = None
+                for split, split_inputs in inputs.items():
+                    act = inputs[split][0][group]['activations'].copy()
+                    mask_index = splits_to_index[split]
+                    c_mask = np.full((act.shape[0],),mask_index)
+                    mask = np.concatenate((mask,c_mask))
+                    if not isinstance(activations,np.ndarray):
+                        activations = act
+                    else:    
+                        activations = np.concatenate((activations,act),axis=0)
+    
+                cluster_model = group_to_models[group]
+                assignment = np.array(cluster_model.predict(activations))
+                assert(len(mask)==assignment.shape[0])
+                for split in splits:
+                    mask_index = splits_to_index[split]
+                    assignments[split][group] = assignment[mask==mask_index]
+
+
         for split, split_inputs in inputs.items():
-            metrics, outputs = c_trainer.evaluate(group_to_models, inputs[split])
+            a = None
+            if assignments:
+                a = assignments[split]
+            metrics, outputs = c_trainer.evaluate(group_to_models, inputs[split],a=a)
             split_to_metrics[split] = metrics
             split_to_outputs[split] = outputs
+        
 
         # (3) save everything
         self._save_json(os.path.join(save_dir, 'metrics.json'), split_to_metrics)
@@ -414,13 +446,15 @@ class GEORGEHarness:
 
     def get_cluster_model(self, config):
         cluster_config = config['cluster_config']
-
         kwargs = {
             'cluster_method': cluster_config['model'],
             'max_k': cluster_config['k'],
             'seed': config['seed'],
             'sil_cuda': cluster_config['sil_cuda'],
-            'search': cluster_config['search_k']
+            'search': cluster_config['search_k'],
+            'n_components' : cluster_config['n_components'],
+            'gamma': cluster_config['gamma'],
+            'affinity': cluster_config['affinity'],
         }
         if cluster_config['overcluster']:
             cluster_model = OverclusterModel(**kwargs, oc_fac=cluster_config['overcluster_factor'])
