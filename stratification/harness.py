@@ -269,7 +269,7 @@ class GEORGEHarness:
         assignments = None
         if cluster_config['model']=='spectral':
             splits = list(inputs.keys())
-            assignments = {s: {} for s in split}
+            assignments = {s: {} for s in splits}
             splits_to_index = {split:i for i,split in enumerate(splits)}
             groups = list(inputs[splits[0]][0].keys())
             for group in groups:
