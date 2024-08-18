@@ -143,7 +143,7 @@ class AutoKMixtureModel:
         self.seed = seed
         self.sil_cuda = sil_cuda
         self.verbose = verbose
-        self.n_components = n_components
+        self.n_components = n_components if n_components else None
         self.affinity = affinity
         self.gamma = gamma        
 
