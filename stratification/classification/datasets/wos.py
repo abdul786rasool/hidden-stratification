@@ -87,7 +87,7 @@ class WOSDataset(GEORGEDataset):
             tuple: (x: torch.Tensor, y: dict) where X is a tensor representing an image
                 and y is a dictionary of possible labels.
         """
-        x = self.X[idx].view((64,64))
+        x = self.X[idx].view((1,64,64))
 
         y_dict = {name: label[idx] for name, label in self.Y_dict.items()}
         return x, y_dict
