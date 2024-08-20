@@ -5,3 +5,4 @@ from .waterbirds import WaterbirdsDataset
 from .mnist import MNISTDataset
 from .cifar import CIFARDataset
 from .cifar_ten import CifarTenDataset
+from .wos import WOSDataset
