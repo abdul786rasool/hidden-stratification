@@ -359,7 +359,8 @@ class GEORGEHarness:
             'mnist': MNISTDataset,
             'waterbirds': WaterbirdsDataset,
             'cifar' : CIFARDataset,
-            'cifar10': CifarTenDataset
+            'cifar10': CifarTenDataset,
+            'wos': WOSDataset
         }
         dataset_class = d[dataset_name]
         batch_size = config['batch_size']
