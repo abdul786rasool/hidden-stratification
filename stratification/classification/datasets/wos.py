@@ -52,10 +52,10 @@ class WOSDataset(GEORGEDataset):
         splits = pd.read_csv(os.path.join(self.processed_folder, 'split.csv'),names=['split'])
 
         # split dataset
-        split_mask = (splits == self.split_dict[self.split])
+        split_mask = (splits == self.split_dict[self.split]).squeeze()
         embeddings = embeddings[split_mask]
         superclass = superclass[split_mask]
-        true_subclass = superclass[split_mask]
+        true_subclass = true_subclass[split_mask]
         assert(embeddings.shape[0]==superclass.shape[0])
         assert(embeddings.shape[0]==true_subclass.shape[0])
 
