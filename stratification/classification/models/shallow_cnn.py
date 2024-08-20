@@ -16,7 +16,7 @@ class ShallowCNN(nn.Module):
         # Store the name of the layer whose output we want to use as features
         # (typically the last operation before the classification layer)
         self.activation_layer_name = 'convnet.relu3'
-        self.fc = nn.Linear(512, classes)
+        self.fc = nn.Linear(5408, classes)
 
     def forward(self, img, save_act=None):
         output = self.convnet(img)
