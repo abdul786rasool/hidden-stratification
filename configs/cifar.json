@@ -9,11 +9,10 @@
         "optimizer_config": {
             "class_args": {
                 "lr": 0.005,
-                "weight_decay": 1e-5
-                             
-                
+                "weight_decay": 1e-5,
+                "momentum": 0.9 
             },
-            "class_name": "Adam"
+            "class_name": "SGD"
         },
         "workers": 8,
         "criterion_config": {},
