@@ -50,6 +50,8 @@
     },
     "cluster_config": {
         "model": "gmm",
+        "gamma":1.0,
+        "affinity": "rbf",        
         "metric_types": [
              "mean_loss",
             "composition"
