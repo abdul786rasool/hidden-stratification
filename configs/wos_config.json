@@ -4,7 +4,7 @@
     "mode": "george",
     "seed": 0,
     "classification_config": {
-        "model": "resnet50",
+        "model": "llama2",
         "checkpoint_metric": "val_acc_rw",
         "optimizer_config": {
             "class_args": {
