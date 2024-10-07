@@ -15,7 +15,6 @@ class WOSDataset(GEORGEDataset):
     """WOS Dataset
     """
 
-
     # used to determine subclasses (index here used for querying sample class)
     
     split_dict = {'train': 0, 'val': 1, 'test': 2}
@@ -33,7 +32,7 @@ class WOSDataset(GEORGEDataset):
 
     def _check_exists(self):
         """Checks whether or not the wos labels CSV has been initialized."""
-        return (os.path.isfile(os.path.join(self.processed_folder, 'main_tensor.pt')) and 
+        return (os.path.isfile(os.path.join(self.processed_folder, 'X.txt')) and 
                 os.path.isfile(os.path.join(self.processed_folder, 'label.csv')) and
                 os.path.isfile(os.path.join(self.processed_folder, 'label_level1.csv'))
                 )
@@ -44,8 +43,12 @@ class WOSDataset(GEORGEDataset):
 
     def _load_samples(self):
         """Loads the WOS dataset"""
-        embeddings = np.array(torch.load(os.path.join(self.processed_folder,'main_tensor.pt')))
-        embeddings = np.squeeze(embeddings)
+        #embeddings = np.array(torch.load(os.path.join(self.processed_folder,'main_tensor.pt')))
+        #embeddings = np.squeeze(embeddings)
+        file_path = os.path.join(self.processed_folder,'X.txt')
+        with open(file_path, 'r', encoding='utf-8') as file:
+            texts = file.read().splitlines()
+        texts = np.array(texts)
         superclass = np.array(pd.read_csv(os.path.join(self.processed_folder,'label_level1.csv'))['0'])
         true_subclass = np.array(pd.read_csv(os.path.join(self.processed_folder,'label.csv'))['0'])
         self.create_splits(true_subclass.shape[0])
@@ -53,13 +56,15 @@ class WOSDataset(GEORGEDataset):
 
         # split dataset
         split_mask = (splits == self.split_dict[self.split]).squeeze()
-        embeddings = embeddings[split_mask]
+        #embeddings = embeddings[split_mask]
+        texts = texts[split_mask]
         superclass = superclass[split_mask]
         true_subclass = true_subclass[split_mask]
-        assert(embeddings.shape[0]==superclass.shape[0])
-        assert(embeddings.shape[0]==true_subclass.shape[0])
+        assert(texts.shape[0]==superclass.shape[0])
+        assert(texts.shape[0]==true_subclass.shape[0])
 
-        X = torch.from_numpy(embeddings)
+        #X = torch.from_numpy(embeddings)
+        X = texts
         Y_dict = {
             'superclass': torch.from_numpy(superclass),
             'true_subclass': torch.from_numpy(true_subclass)
@@ -87,7 +92,6 @@ class WOSDataset(GEORGEDataset):
             tuple: (x: torch.Tensor, y: dict) where X is a tensor representing an image
                 and y is a dictionary of possible labels.
         """
-        x = self.X[idx].view((1,64,64))
-
+        x = self.X[idx]
         y_dict = {name: label[idx] for name, label in self.Y_dict.items()}
         return x, y_dict
