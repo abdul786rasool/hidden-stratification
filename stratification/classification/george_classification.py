@@ -306,7 +306,10 @@ class GEORGEClassification:
             bar = ProgressBar(progress_prefix, max=len(dataloader), width=50)
 
         for batch_idx, (inputs, targets) in enumerate(dataloader):
-            batch_size = len(inputs)
+            if isinstance(inputs,dict):
+                batch_size = inputs['input_ids']
+            else:    
+                batch_size = len(inputs)
             if self.use_cuda:
                 inputs, targets = move_to_device([inputs, targets], device=self.device)
 
