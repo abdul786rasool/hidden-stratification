@@ -34,7 +34,7 @@ class LlamaForClassification(nn.Module):
         return logits
 
 
-def collate_fn_llama2(batch,y_dict):
+def collate_fn_llama2(batch):
     # Tokenize each text in the batch
     tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     tokenizer.pad_token = tokenizer.eos_token
