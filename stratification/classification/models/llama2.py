@@ -36,10 +36,11 @@ class LlamaForClassification(nn.Module):
 
 def collate_fn_llama2(batch):
     # Tokenize each text in the batch
+    texts, y_dict = zip(*batch)
     tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     tokenizer.pad_token = tokenizer.eos_token
     tokenized_batch = tokenizer(
-        batch,  # List of texts
+        list(texts),  # List of texts
         truncation=True,
         padding=True,  # Perform padding here
         return_tensors='pt'
