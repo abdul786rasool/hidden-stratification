@@ -360,7 +360,7 @@ class GEORGEHarness:
             'waterbirds': WaterbirdsDataset,
             'cifar' : CIFARDataset,
             'cifar10': CifarTenDataset,
-            'wos': WOSDataset
+            'wos': WOSDataset,
         }
         dataset_class = d[dataset_name]
         batch_size = config['batch_size']
@@ -370,6 +370,9 @@ class GEORGEHarness:
             key = 'train' if 'train' in split else split
             split_subclass_labels = subclass_labels[key]
             shared_dl_args = {'batch_size': batch_size, 'num_workers': config['workers']}
+            if config['model'] in ['llama2']:
+                shared_dl_args['collate_fn'] = collate_fn_llama2
+            
             if split == 'train':
                 dataset = dataset_class(root='./data', split=split, download=True, augment=True,
                                         **config['dataset_config'])
@@ -414,7 +417,7 @@ class GEORGEHarness:
         if cl_config['bit_pretrained']:
             model_cls = Dino_Model
         else:
-            models = {'lenet4': LeNet4, 'resnet50': PyTorchResNet, 'shallow_cnn': ShallowCNN,'bit_resnet': BiTResNet}
+            models = {'lenet4': LeNet4, 'resnet50': PyTorchResNet, 'shallow_cnn': ShallowCNN,'bit_resnet': BiTResNet,'llama2':llama2}
             try:
                 model_cls = models[cl_config['model']]
             except KeyError:
