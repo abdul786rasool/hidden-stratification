@@ -309,7 +309,7 @@ class GEORGEClassification:
 
         for batch_idx, (inputs, targets) in enumerate(dataloader):
             if isinstance(inputs,dict):
-                batch_size = inputs['input_ids']
+                batch_size = len(inputs['input_ids'])
             else:    
                 batch_size = len(inputs)
             if self.use_cuda:
