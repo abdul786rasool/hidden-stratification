@@ -1,3 +1,12 @@
+import warnings
+
+# Suppress the FutureWarning for clean_up_tokenization_spaces
+warnings.filterwarnings(
+    "ignore",
+    category=FutureWarning,
+    message=r".*clean_up_tokenization_spaces.*"
+)
+
 import torch
 import torch.nn as nn
 from transformers import LlamaTokenizer, LlamaForCausalLM
@@ -36,7 +45,7 @@ class LlamaForClassification(nn.Module):
 
 def collate_fn_llama2(batch):
     # Tokenize each text in the batch
-    texts, y_dict = zip(*batch)
+    texts, y_dicts = zip(*batch)
     tokenizer = LlamaTokenizer.from_pretrained("meta-llama/Llama-2-7b-hf")
     tokenizer.pad_token = tokenizer.eos_token
     tokenized_batch = tokenizer(
@@ -45,11 +54,20 @@ def collate_fn_llama2(batch):
         padding=True,  # Perform padding here
         return_tensors='pt'
     )
+    merged_y_dict = {}
+    for y_dict in y_dicts:
+        for key, value in y_dict.items():
+            if key not in merged_y_dict:
+                merged_y_dict[key] = []
+            merged_y_dict[key].append(value.item())    
+    for key,value in y_dict.items():
+        merged_y_dict[key] = torch.tensor(merged_y_dict[key])
+    
 
     return {
         'input_ids': tokenized_batch['input_ids'],
         'attention_mask': tokenized_batch['attention_mask']
-    }, y_dict
+    }, merged_y_dict
 
 
 def llama2(**kwargs):
