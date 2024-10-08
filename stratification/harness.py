@@ -371,7 +371,8 @@ class GEORGEHarness:
             split_subclass_labels = subclass_labels[key]
             shared_dl_args = {'batch_size': batch_size, 'num_workers': config['workers']}
             if config['model'] in ['llama2','SentenceTransformer']:
-                shared_dl_args['collate_fn'] = eval(f'collate_fn_{config['model']}')
+                m = config['model']
+                shared_dl_args['collate_fn'] = eval(f'collate_fn_{m}')
             
             if split == 'train':
                 dataset = dataset_class(root='./data', split=split, download=True, augment=True,
