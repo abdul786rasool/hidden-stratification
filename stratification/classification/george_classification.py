@@ -80,9 +80,11 @@ def register_save_activations_hook(model, model_activation_layer, activations_li
         activations_list.append(out.view(out.size(0), -1))
 
     for name, m in model.named_modules():
+        print(name)
         if name == model_activation_layer or \
           (isinstance(model, torch.nn.DataParallel) and \
            name.replace('module.', '') == model_activation_layer):
+            print(True) 
             return m.register_forward_hook(save_activations)
     return None
 
