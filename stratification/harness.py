@@ -370,8 +370,8 @@ class GEORGEHarness:
             key = 'train' if 'train' in split else split
             split_subclass_labels = subclass_labels[key]
             shared_dl_args = {'batch_size': batch_size, 'num_workers': config['workers']}
-            if config['model'] in ['llama2']:
-                shared_dl_args['collate_fn'] = collate_fn_llama2
+            if config['model'] in ['llama2','SentenceTransformer']:
+                shared_dl_args['collate_fn'] = eval(f'collate_fn_{config['model']}')
             
             if split == 'train':
                 dataset = dataset_class(root='./data', split=split, download=True, augment=True,
@@ -417,7 +417,7 @@ class GEORGEHarness:
         if cl_config['bit_pretrained']:
             model_cls = Dino_Model
         else:
-            models = {'lenet4': LeNet4, 'resnet50': PyTorchResNet, 'shallow_cnn': ShallowCNN,'bit_resnet': BiTResNet,'llama2':llama2}
+            models = {'lenet4': LeNet4, 'resnet50': PyTorchResNet, 'shallow_cnn': ShallowCNN,'bit_resnet': BiTResNet,'llama2':llama2,'SentenceTransformer':SentenceTransformer}
             try:
                 model_cls = models[cl_config['model']]
             except KeyError:
