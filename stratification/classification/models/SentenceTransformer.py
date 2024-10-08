@@ -24,6 +24,7 @@ def collate_fn_SentenceTransformer(batch):
     # Tokenize each text in the batch
     texts, y_dicts = zip(*batch)
     tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
+    tokenizer.clean_up_tokenization_spaces = True
     tokenized_batch = tokenizer(
         list(texts),  # List of texts
         truncation=True,
