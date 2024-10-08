@@ -1,3 +1,13 @@
+import warnings
+
+# Suppress the FutureWarning for clean_up_tokenization_spaces
+warnings.filterwarnings(
+    "ignore",
+    category=FutureWarning,
+    message=r".*clean_up_tokenization_spaces.*"
+)
+
+
 import torch
 import torch.nn as nn
 from transformers import AutoTokenizer, AutoModel
@@ -29,8 +39,7 @@ def collate_fn_SentenceTransformer(batch):
         list(texts),  # List of texts
         truncation=True,
         padding=True,  # Perform padding here
-        return_tensors='pt',
-        clean_up_tokenization_spaces=True
+        return_tensors='pt
     )
     merged_y_dict = {}
     for y_dict in y_dicts:
