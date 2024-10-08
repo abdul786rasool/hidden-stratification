@@ -39,7 +39,7 @@ def collate_fn_SentenceTransformer(batch):
         list(texts),  # List of texts
         truncation=True,
         padding=True,  # Perform padding here
-        return_tensors='pt
+        return_tensors='pt',
     )
     merged_y_dict = {}
     for y_dict in y_dicts:
