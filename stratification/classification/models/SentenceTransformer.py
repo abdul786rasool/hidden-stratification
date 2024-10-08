@@ -11,7 +11,7 @@ class SentenceTransformerForClassification(nn.Module):
         super(SentenceTransformerForClassification, self).__init__()
         self.model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
         self.classifier = nn.Linear(self.model.config.hidden_size, num_classes)
-        self.activation_layer_name = "pooler.activation"
+        self.activation_layer_name = "module.model.pooler.activation"
 
     def forward(self, inputs):
         outputs = self.model(**inputs)
