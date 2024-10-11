@@ -361,6 +361,7 @@ class GEORGEHarness:
             'cifar' : CIFARDataset,
             'cifar10': CifarTenDataset,
             'wos': WOSDataset,
+            'agnews':AGnewsDataset,
         }
         dataset_class = d[dataset_name]
         batch_size = config['batch_size']
