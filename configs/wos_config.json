@@ -8,11 +8,10 @@
         "checkpoint_metric": "val_acc_rw",
         "optimizer_config": {
             "class_args": {
-                "lr": 1e-5,
-                "weight_decay": 1.0,
-                "momentum": 0.9
+                "lr": 2e-5,
+                "weight_decay": 1e-5
             },
-            "class_name": "SGD"
+            "class_name": "Adam"
         },
         "workers": 8,
         "criterion_config": {},
