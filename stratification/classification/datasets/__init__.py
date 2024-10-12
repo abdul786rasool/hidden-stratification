@@ -7,3 +7,4 @@ from .cifar import CIFARDataset
 from .cifar_ten import CifarTenDataset
 from .wos import WOSDataset
 from .agnews import AGnewsDataset
+from .newsgrp20 import newsgrp20Dataset
