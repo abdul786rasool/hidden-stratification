@@ -48,7 +48,7 @@ class newsgrp20Dataset(GEORGEDataset):
 
         file_path = os.path.join(self.processed_folder,f'{self.split}_data.csv')
         data = pd.read_csv(file_path)
-        texts = np.array(data['text']).squeeze()
+        texts = np.array(data['text'],dtype=str)
         superclass = np.array(data['superclass'])
         subclass = np.array(data['subclass'])
         assert(texts.shape[0]==superclass.shape[0])
