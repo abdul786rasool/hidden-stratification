@@ -36,7 +36,6 @@ def collate_fn_SentenceTransformer(batch):
     tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
     tokenizer.clean_up_tokenization_spaces = True
     
-    print(f'\n\n\n\n\n texts type : {type(texts)}\n inside texts type: {type(texts[0])}\n\n\n')
     tokenized_batch = tokenizer(
         list(texts),  # List of texts
         truncation=True,
