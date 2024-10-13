@@ -48,13 +48,13 @@ class newsgrp20Dataset(GEORGEDataset):
 
         file_path = os.path.join(self.processed_folder,f'{self.split}_data.csv')
         data = pd.read_csv(file_path)
-        texts = np.array(data['text'])
+        texts = np.array(data['text']).squeeze()
         superclass = np.array(data['superclass'])
         subclass = np.array(data['subclass'])
         assert(texts.shape[0]==superclass.shape[0])
         assert(texts.shape[0]==subclass.shape[0])
         
-        X = texts
+        X = texts.tolist()
         Y_dict = {
             'superclass': torch.from_numpy(superclass),
             'true_subclass': torch.from_numpy(subclass)
