@@ -427,6 +427,8 @@ class GEORGEHarness:
                 raise ValueError('Unsupported model architecture')
         model = model_cls(num_classes=num_classes)
         if self.use_cuda:
+            if cl_config['model'] in ['llama2']:
+                model.half()
             model = torch.nn.DataParallel(model).cuda()
         self.logger.info('Model:')
         self.logger.info(str(model))
