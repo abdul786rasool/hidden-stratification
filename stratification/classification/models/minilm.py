@@ -38,9 +38,6 @@ def collate_fn_miniLM(batch):
     texts, y_dicts = zip(*batch)
     tokenizer = AutoTokenizer.from_pretrained('microsoft/MiniLM-L12-H384-uncased')
     #tokenizer.pad_token = tokenizer.eos_token
-    print(len(list(texts)))
-    for t in list(texts):
-        print(len(t))
     tokenized_batch = tokenizer(
         list(texts),  # List of texts
         max_length=512,
