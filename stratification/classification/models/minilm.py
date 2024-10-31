@@ -39,10 +39,10 @@ def collate_fn_miniLM(batch):
     tokenizer = AutoTokenizer.from_pretrained('microsoft/MiniLM-L12-H384-uncased')
     #tokenizer.pad_token = tokenizer.eos_token
     print(len(list(texts)))
-    for t in list(texts)):
+    for t in list(texts):
         print len(t)
     tokenized_batch = tokenizer(
-        list((texts),  # List of texts
+        list(texts),  # List of texts
         truncation=True,
         padding=True,  # Perform padding here
         return_tensors='pt'
