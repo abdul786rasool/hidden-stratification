@@ -21,7 +21,7 @@ class MiniLM(nn.Module):
     def __init__(self, num_classes):
         super(MiniLM, self).__init__()
         self.classifier = AutoModelForSequenceClassification.from_pretrained('microsoft/MiniLM-L12-H384-uncased', num_labels=num_classes)
-        self.activation_layer_name = "bert.pooler.activation"
+        self.activation_layer_name = "classifier.bert.pooler.activation"
 
     def forward(self, inputs):
         input_ids = inputs['input_ids']
