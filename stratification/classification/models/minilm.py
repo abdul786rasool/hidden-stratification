@@ -42,7 +42,7 @@ def collate_fn_miniLM(batch):
     for t in list(texts)):
         print len(t)
     tokenized_batch = tokenizer(
-        list(texts),  # List of texts
+        list((texts),  # List of texts
         truncation=True,
         padding=True,  # Perform padding here
         return_tensors='pt'
