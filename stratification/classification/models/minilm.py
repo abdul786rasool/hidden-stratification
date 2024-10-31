@@ -26,10 +26,7 @@ class MiniLM(nn.Module):
     def forward(self, inputs):
         input_ids = inputs['input_ids']
         attention_mask = inputs['attention_mask']
-        print(input_ids.shape)
-        print(attention_mask.shape)
         logits = self.classifier(**inputs).logits
-        print(logits.shape)
         return logits
 
 
